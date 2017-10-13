@@ -1,0 +1,17 @@
+.Header {
+  background-color: teal;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Header > h1 {
+  margin-left: 32px;
+  color: white;
+  font-size: 22px;
+}
+
+.Header-github {
+  margin-right: 32px;
+}
