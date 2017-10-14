@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { sleep } from '../utils';
 
 export interface Props {
   /** The number in seconds to count down from. */
@@ -34,8 +35,4 @@ export default class Countdown extends React.Component<Props, State> {
   render() {
     return <h1>{this.state.timeRemaining}</h1>;
   }
-}
-
-function sleep(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
 }

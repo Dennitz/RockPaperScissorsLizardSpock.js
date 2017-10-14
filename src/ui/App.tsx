@@ -6,7 +6,7 @@ import TrainImgCapturer from './TrainImgCapturer';
 
 class App extends React.Component {
   render() {
-    if (process.env.REACT_APP_TRAIN) {
+    if (process.env.REACT_APP_TRAIN && process.env.NODE_ENV !== 'production') {
       return <TrainImgCapturer />;
     }
     return (
