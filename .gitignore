@@ -22,3 +22,7 @@ yarn-error.log*
 
 # training data
 /data
+
+### JupyterNotebook ###
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*
