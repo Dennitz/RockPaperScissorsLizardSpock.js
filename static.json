@@ -1,6 +1,6 @@
 {
 	"root": "build/",
 	"routes": {
-		"/deeplearn-checkpoint/manifest.json": "src/ai/deeplearn-checkpoint/manifest.json"
+		"/deeplearn-checkpoint/manifest.json": "ai/deeplearn-checkpoint/manifest.json"
 	}
 }
