@@ -1,7 +1,7 @@
 /**
  * Taken from https://github.com/PAIR-code/deeplearnjs/blob/master/demos/models/squeezenet.ts
- * but adjusted to make predictions for 6 classes (rock, paper, scissors, 
- * lizard, spock, other) instead of for the 1000 imagenet classes.
+ * with adjusted deeplearn variable names and added function to
+ * return the name of the class with the highest probability.
  */
 import {
   Array1D,
@@ -14,12 +14,7 @@ import {
   NDArrayMathGPU,
 } from 'deeplearn';
 import * as imagenet_util from './imagenet_util';
-
-const IMAGE_SIZE = 227;
-const GOOGLE_CLOUD_STORAGE_DIR =
-  'https://storage.googleapis.com/learnjs-data/checkpoint_zoo/';
-
-const CLASSES = ['rock', 'paper', 'scissors', 'lizard', 'spock', 'other'];
+import { CATEGORIES, IMAGE_SIZE } from '../constants';
 
 export class SqueezeNet {
   private variables: { [varName: string]: NDArray };
@@ -39,9 +34,7 @@ export class SqueezeNet {
    */
   loadVariables(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const checkpointLoader = new CheckpointLoader(
-        GOOGLE_CLOUD_STORAGE_DIR + 'squeezenet1_1/',
-      );
+      const checkpointLoader = new CheckpointLoader('./deeplearn-checkpoint/');
       checkpointLoader.getAllVariables().then(variables => {
         this.variables = variables;
         resolve();
@@ -85,11 +78,11 @@ export class SqueezeNet {
    * one of 'rock', 'paper', 'scissors', 'lizard', 'spock', 'other'
    * @param logits Pre-softmax logits array
    */
-  getTopClass(logits: Array1D) {
+  getTopClass(logits: Array1D): string {
     const predictions = this.math.softmax(logits);
     const top = new NDArrayMathCPU().topK(predictions, 1);
     const topIdx = top.indices.getValues()[0];
-    return CLASSES[topIdx];
+    return CATEGORIES[topIdx];
   }
 
   /**
@@ -112,8 +105,8 @@ export class SqueezeNet {
     const avgpool10 = this.math.scope(keep => {
       const conv1 = this.math.conv2d(
         preprocessedInput,
-        this.variables['conv1_W:0'] as Array4D,
-        this.variables['conv1_b:0'] as Array1D,
+        this.variables['conv1/kernel'] as Array4D,
+        this.variables['conv1/bias'] as Array1D,
         2,
         0,
       );
@@ -172,8 +165,8 @@ export class SqueezeNet {
       const conv10 = keep(
         this.math.conv2d(
           fire9,
-          this.variables['conv10_W:0'] as Array4D,
-          this.variables['conv10_b:0'] as Array1D,
+          this.variables['conv10/kernel'] as Array4D,
+          this.variables['conv10/bias'] as Array1D,
           1,
           0,
         ),
@@ -189,16 +182,16 @@ export class SqueezeNet {
   private fireModule(input: Array3D, fireId: number) {
     const y1 = this.math.conv2d(
       input,
-      this.variables['fire' + fireId + '/squeeze1x1_W:0'] as Array4D,
-      this.variables['fire' + fireId + '/squeeze1x1_b:0'] as Array1D,
+      this.variables['fire' + fireId + '/squeeze1x1/kernel'] as Array4D,
+      this.variables['fire' + fireId + '/squeeze1x1/bias'] as Array1D,
       1,
       0,
     );
     const y2 = this.math.relu(y1);
     const left1 = this.math.conv2d(
       y2,
-      this.variables['fire' + fireId + '/expand1x1_W:0'] as Array4D,
-      this.variables['fire' + fireId + '/expand1x1_b:0'] as Array1D,
+      this.variables['fire' + fireId + '/expand1x1/kernel'] as Array4D,
+      this.variables['fire' + fireId + '/expand1x1/bias'] as Array1D,
       1,
       0,
     );
@@ -206,8 +199,8 @@ export class SqueezeNet {
 
     const right1 = this.math.conv2d(
       y2,
-      this.variables['fire' + fireId + '/expand3x3_W:0'] as Array4D,
-      this.variables['fire' + fireId + '/expand3x3_b:0'] as Array1D,
+      this.variables['fire' + fireId + '/expand3x3/kernel'] as Array4D,
+      this.variables['fire' + fireId + '/expand3x3/bias'] as Array1D,
       1,
       1,
     );

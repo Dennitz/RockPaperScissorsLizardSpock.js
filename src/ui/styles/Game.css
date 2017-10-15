@@ -1,4 +1,5 @@
 .Game {
+  margin-top: 72px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -15,4 +16,5 @@
 
 .Game-computer {
   background-color: #80cbc4;
+  border-radius: 8px;
 }

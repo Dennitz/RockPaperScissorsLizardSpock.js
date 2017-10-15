@@ -1,3 +1,4 @@
 .WebcamClassifier {
   transform: rotateY(180deg);
+  border-radius: 8px;
 }

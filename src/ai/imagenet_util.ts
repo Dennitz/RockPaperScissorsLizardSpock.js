@@ -1,5 +1,4 @@
 // Taken from https://github.com/PAIR-code/deeplearnjs/blob/master/demos/models/imagenet_util.ts
-
 import { GPGPUContext, webgl_util } from 'deeplearn';
 
 /**

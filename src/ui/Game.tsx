@@ -13,6 +13,7 @@ export interface Props {}
 
 export interface State {
   outcome: Outcome | undefined;
+  predictedClass: string;
 }
 
 export default class Game extends React.Component<Props, State> {
@@ -20,6 +21,7 @@ export default class Game extends React.Component<Props, State> {
 
   state = {
     outcome: undefined,
+    predictedClass: 'keine',
   };
 
   componentDidMount() {
@@ -48,7 +50,10 @@ export default class Game extends React.Component<Props, State> {
     }
   };
 
-  private handlePredict = (predictedClass: string) => {};
+  private handlePredict = (predictedClass: string) => {
+    this.setState({ predictedClass: predictedClass });
+    console.log('handlePredict');
+  };
 
   render() {
     return (
@@ -67,6 +72,7 @@ export default class Game extends React.Component<Props, State> {
           </div>
         </div>
         <div>{this.renderOutcome()} </div>
+        <div>{this.state.predictedClass}</div>
       </div>
     );
   }
