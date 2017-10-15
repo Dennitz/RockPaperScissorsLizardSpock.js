@@ -34,7 +34,7 @@ export class SqueezeNet {
    */
   loadVariables(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
-      const checkpointLoader = new CheckpointLoader('./deeplearn-checkpoint/');
+      const checkpointLoader = new CheckpointLoader('../../public/deeplearn-checkpoint/');
       checkpointLoader.getAllVariables().then(variables => {
         this.variables = variables;
         resolve();
