@@ -1,12 +1,14 @@
 import * as React from 'react';
 import {
+  Array3D,
   gpgpu_util,
   GPGPUContext,
   NDArrayMathCPU,
   NDArrayMathGPU,
-} from 'deeplearn';
+} from '../deeplearn';
 import { SqueezeNet } from '../ai/squeezenet';
 import { IMAGE_SIZE } from '../constants';
+import { sleep } from '../utils';
 import './styles/WebcamClassifier.css';
 
 export interface Props {
@@ -22,7 +24,6 @@ export default class CamInput extends React.Component<Props, {}> {
   private gl: WebGLRenderingContext;
   private gpgpu: GPGPUContext;
   private math: NDArrayMathGPU;
-  private mathCPU: NDArrayMathCPU;
   private squeezeNet: SqueezeNet;
 
   constructor() {
@@ -30,8 +31,7 @@ export default class CamInput extends React.Component<Props, {}> {
     this.gl = gpgpu_util.createWebGLContext();
     this.gpgpu = new GPGPUContext(this.gl);
     this.math = new NDArrayMathGPU(this.gpgpu);
-    this.mathCPU = new NDArrayMathCPU();
-    this.squeezeNet = new SqueezeNet(this.gpgpu, this.math);
+    this.squeezeNet = new SqueezeNet(this.math);
   }
 
   componentDidMount() {
@@ -43,13 +43,15 @@ export default class CamInput extends React.Component<Props, {}> {
       navigatorAny.msGetUserMedia;
 
     // get permission for webcam, if successful attach
-    // webcam footage to video element
+    // webcam footage to video element and start predicting
     if (navigator.getUserMedia) {
       navigator.getUserMedia(
         { video: { width: IMAGE_SIZE, height: IMAGE_SIZE } },
         stream => {
           this.webcamElement.src = window.URL.createObjectURL(stream);
-          this.webcamElement.play();
+          this.webcamElement.play().then(() => {
+            this.squeezeNet.loadVariables().then(this.predict);
+          });
         },
         err => {
           console.log(err);
@@ -58,36 +60,28 @@ export default class CamInput extends React.Component<Props, {}> {
     } else {
       console.log('no camera');
     }
-
-    this.squeezeNet.loadVariables().then(this.predict);
   }
 
-  private predict = () => {
-    const canvasTextureShape: [number, number] = [IMAGE_SIZE, IMAGE_SIZE];
-    const canvasTexture = this.math
-      .getTextureManager()
-      .acquireTexture(canvasTextureShape);
-
-    this.gpgpu.uploadPixelDataToTexture(canvasTexture, this.webcamElement);
+  private predict = async () => {
+    const image = Array3D.fromPixels(this.webcamElement);
 
     this.math.scope((keep, track) => {
-      const preprocessedInput = track(
-        this.squeezeNet.preprocessColorTextureToArray3D(
-          canvasTexture,
-          canvasTextureShape,
-        ),
+      const inferenceResult = this.squeezeNet.infer(image);
+      const topClassesToProbability = this.squeezeNet.getTopKClasses(
+        inferenceResult.logits,
+        6,
       );
-
-      const inferenceResult = this.squeezeNet.infer(preprocessedInput);
+      console.log(topClassesToProbability);
       const predictedClass = this.squeezeNet.getTopClass(
         inferenceResult.logits,
       );
       this.props.onPredict(predictedClass);
     });
 
-    this.math
-      .getTextureManager()
-      .releaseTexture(canvasTexture, canvasTextureShape);
+    image.dispose();
+
+    await sleep(3000);
+    this.predict();
   };
 
   render() {
@@ -95,6 +89,9 @@ export default class CamInput extends React.Component<Props, {}> {
       <video
         ref={(v: HTMLVideoElement) => (this.webcamElement = v)}
         className="WebcamClassifier"
+        // width and height props have to be set to work with deeplearn.js
+        width={IMAGE_SIZE}
+        height={IMAGE_SIZE}
       />
     );
   }

@@ -51,8 +51,8 @@ export default class Game extends React.Component<Props, State> {
   };
 
   private handlePredict = (predictedClass: string) => {
-    this.setState({ predictedClass: predictedClass });
-    console.log('handlePredict');
+    // this.setState({ predictedClass: predictedClass });
+    // console.log(predictedClass);
   };
 
   render() {

@@ -1,0 +1,18 @@
+import { Features } from './environment';
+import { NDArrayMath } from './math/math';
+import { TypedArray } from './util';
+export declare const TEST_EPSILON = 0.01;
+export declare function expectArraysClose(actual: TypedArray, expected: TypedArray, epsilon?: number): void;
+export declare function expectNumbersClose(a: number, e: number, epsilon?: number): void;
+export declare function randomArrayInRange(n: number, minValue: number, maxValue: number): Float32Array;
+export declare function makeIdentity(n: number): Float32Array;
+export declare function setValue(m: Float32Array, mNumRows: number, mNumCols: number, v: number, row: number, column: number): void;
+export declare function cpuMultiplyMatrix(a: Float32Array, aRow: number, aCol: number, b: Float32Array, bRow: number, bCol: number): Float32Array;
+export declare function cpuDotProduct(a: Float32Array, b: Float32Array): number;
+export declare type MathTests = (it: (name: string, testFn: (math: NDArrayMath) => void) => void) => void;
+export declare type Tests = (it: (name: string, testFn: () => void) => void) => void;
+export declare function describeMathCPU(name: string, tests: MathTests[], featuresList?: Features[]): void;
+export declare function describeMathGPU(name: string, tests: MathTests[], featuresList?: Features[]): void;
+export declare function describeCustom(name: string, tests: Tests, featuresList?: Features[], customBeforeEach?: () => void, customAfterEach?: () => void): void;
+export declare function executeMathTests(testName: string, tests: MathTests[], mathFactory: () => NDArrayMath, features?: Features): void;
+export declare function executeTests(testName: string, tests: Tests[], features?: Features, customBeforeEach?: () => void, customAfterEach?: () => void, customIt?: (expectation: string, testFunc: () => void) => void): void;
