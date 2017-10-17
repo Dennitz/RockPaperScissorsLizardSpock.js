@@ -52,7 +52,6 @@ export class SqueezeNet {
   } {
     // Keep a map of named activations for rendering purposes.
     const namedActivations: { [key: string]: Array3D } = {};
-
     const avgpool10 = this.math.scope(keep => {
       // Preprocess the input.
       const preprocessedInput = this.math.sub(

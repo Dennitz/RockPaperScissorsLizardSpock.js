@@ -3,7 +3,6 @@ import {
   Array3D,
   gpgpu_util,
   GPGPUContext,
-  NDArrayMathCPU,
   NDArrayMathGPU,
 } from '../deeplearn';
 import { SqueezeNet } from '../ai/squeezenet';
@@ -67,11 +66,11 @@ export default class CamInput extends React.Component<Props, {}> {
 
     this.math.scope((keep, track) => {
       const inferenceResult = this.squeezeNet.infer(image);
-      const topClassesToProbability = this.squeezeNet.getTopKClasses(
-        inferenceResult.logits,
-        6,
-      );
-      console.log(topClassesToProbability);
+      // const topClassesToProbability = this.squeezeNet.getTopKClasses(
+      //   inferenceResult.logits,
+      //   6,
+      // );
+      // console.log(topClassesToProbability);
       const predictedClass = this.squeezeNet.getTopClass(
         inferenceResult.logits,
       );
@@ -80,7 +79,7 @@ export default class CamInput extends React.Component<Props, {}> {
 
     image.dispose();
 
-    await sleep(3000);
+    await sleep(50);
     this.predict();
   };
 
