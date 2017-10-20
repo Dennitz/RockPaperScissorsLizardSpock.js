@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as JSZip from 'jszip';
 import { saveAs } from 'file-saver';
 import './styles/TrainImgCapturer.css';
-import { CATEGORIES, IMAGE_SIZE } from '../constants';
+import { CLASSES, IMAGE_SIZE } from '../constants';
 import { sleep } from '../utils';
 import CamInput from './CamInput';
 
@@ -120,7 +120,7 @@ export default class TrainImgCapturer extends React.Component<{}, State> {
           }}
         />
         <div>
-          {CATEGORIES.map(category => (
+          {CLASSES.map(category => (
             <div>
               <button
                 key={category + 'button'}

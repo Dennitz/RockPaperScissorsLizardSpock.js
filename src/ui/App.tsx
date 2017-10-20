@@ -1,8 +1,8 @@
 import * as React from 'react';
-import './styles/App.css';
 import Game from './Game';
 import Header from './Header';
 import TrainImgCapturer from './TrainImgCapturer';
+import './styles/App.css';
 
 class App extends React.Component {
   render() {
@@ -12,7 +12,10 @@ class App extends React.Component {
     return (
       <div className="App">
         <Header />
-        <Game />
+        <div className="App-content">
+          <Game />
+        </div>
+        <div className="App-footer" />
       </div>
     );
   }

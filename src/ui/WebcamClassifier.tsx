@@ -57,7 +57,7 @@ export default class CamInput extends React.Component<Props, {}> {
         },
       );
     } else {
-      console.log('no camera');
+      console.log('your browser might not be supported');
     }
   }
 
@@ -88,7 +88,7 @@ export default class CamInput extends React.Component<Props, {}> {
       <video
         ref={(v: HTMLVideoElement) => (this.webcamElement = v)}
         className="WebcamClassifier"
-        // width and height props have to be set to work with deeplearn.js
+        // width and height props have to be here set to work with deeplearn.js
         width={IMAGE_SIZE}
         height={IMAGE_SIZE}
       />

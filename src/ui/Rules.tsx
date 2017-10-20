@@ -1,21 +1,35 @@
 import * as React from 'react';
+import TextSection from './TextSection';
+import './styles/Rules.css';
 
-export interface Props {}
-export interface State {}
+const rule_parts = [
+  'Scissors cuts Paper,',
+  'Paper covers Rock,',
+  'Rock crushes Lizard,',
+  'Lizard poisons Spock,',
+  'Spock smashes Scissors,',
+  'Scissors decapitates Lizard,',
+  'Lizard eats Paper,',
+  'Paper disproves Spock,',
+  'Spock vaporizes Rock,',
+  'and (as it always has) Rock crushes Scissors.',
+];
 
-export default class Rules extends React.Component<Props, State> {
-  render() {
-    return [
-      <li key="a">Scissors cuts Paper</li>,
-      <li key="b">Paper covers Rock</li>,
-      <li key="c">Rock crushes Lizard</li>,
-      <li key="d">Lizard poisons Spock</li>,
-      <li key="e">Spock smashes Scissors</li>,
-      <li key="f">Scissors decapitates Lizard</li>,
-      <li key="g">Lizard eats Paper</li>,
-      <li key="h">Paper disproves Spock</li>,
-      <li key="i">Spock vaporizes Rock</li>,
-      <li key="j">(and as it always has) Rock crushes Scissors</li>,
-    ];
-  }
+export default function Rules() {
+  return (
+    <TextSection heading="Rules">
+      <div className="Rules-content">
+        <ul className="Rules-list">
+          {rule_parts.map(rule => <li key={rule}>{rule}</li>)}
+        </ul>
+        <img
+          className="Rules-image"
+          src={require('./rules.png')}
+          alt="rules-image"
+          width={256}
+          height={256}
+        />
+      </div>
+    </TextSection>
+  );
 }

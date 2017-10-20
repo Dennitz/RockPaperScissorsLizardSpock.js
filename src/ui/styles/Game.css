@@ -1,5 +1,5 @@
 .Game {
-  margin-top: 72px;
+  margin-top: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,10 +11,17 @@
 }
 
 .Game-spacer {
-  width: 15px;
+  width: 48px;
 }
 
 .Game-computer {
   background-color: #80cbc4;
   border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center
+}
+
+.Game-text-sections > * {
+  margin-top: 48px;
 }

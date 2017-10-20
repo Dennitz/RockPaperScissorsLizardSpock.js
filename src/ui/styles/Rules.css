@@ -1,0 +1,15 @@
+.Rules-image {
+  width: 256;
+  height: 256;
+  vertical-align: middle;
+}
+
+.Rules-content {
+  display: flex;
+}
+
+.Rules-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}

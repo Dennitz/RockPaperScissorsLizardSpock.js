@@ -21,6 +21,7 @@ export default class Countdown extends React.Component<Props, State> {
   }
 
   async start(afterCountdown: () => void) {
+    this.setState({ timeRemaining: this.props.startAt });
     await this.countdown();
     afterCountdown();
   }

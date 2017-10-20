@@ -13,7 +13,7 @@ import {
   NDArrayMathGPU,
 } from '../deeplearn';
 
-import { CATEGORIES } from '../constants';
+import { CLASSES } from '../constants';
 
 export class SqueezeNet {
   private variables: { [varName: string]: NDArray };
@@ -174,7 +174,7 @@ export class SqueezeNet {
 
     const topClassesToProbability: { [className: string]: number } = {};
     for (let i = 0; i < topkIndices.length; i++) {
-      topClassesToProbability[CATEGORIES[topkIndices[i]]] = topkValues[i];
+      topClassesToProbability[CLASSES[topkIndices[i]]] = topkValues[i];
     }
     return topClassesToProbability;
   }
@@ -188,6 +188,6 @@ export class SqueezeNet {
     const predictions = this.math.softmax(logits);
     const top = new NDArrayMathCPU().topK(predictions, 1);
     const topIdx = top.indices.getValues()[0];
-    return CATEGORIES[topIdx];
+    return CLASSES[topIdx];
   }
 }
