@@ -3,22 +3,20 @@ import WebcamClassifier from './WebcamClassifier';
 import Countdown from './Countdown';
 import About from './About';
 import Rules from './Rules';
-import { IMAGE_SIZE } from '../constants';
+import { IMAGE_SIZE, CLASSES } from '../constants';
 import { randomInt, sleep } from '../utils';
 import './styles/Game.css';
 
-// computer can not choose class other
-const CLASSES_COMPUTER = [
-  'lizard',
-  'paper',
-  'rock',
-  'scissors',
-  'spock',
-];
+// computer can not choose class 'other'
+const CLASSES_COMPUTER = CLASSES.filter(c => c !== 'other');
+// contains an icon for each class
+const IMAGES = {};
+CLASSES.forEach(c => (IMAGES[c] = require('./images/' + c + '.png')));
 
 export interface State {
   result: string | undefined;
   currentShownClass: string;
+  computerClass: string | undefined;
 }
 
 export default class Game extends React.Component<{}, State> {
@@ -33,6 +31,7 @@ export default class Game extends React.Component<{}, State> {
     this.state = {
       result: undefined,
       currentShownClass: 'other',
+      computerClass: undefined,
     };
   }
 
@@ -46,28 +45,33 @@ export default class Game extends React.Component<{}, State> {
     const computerClass =
       CLASSES_COMPUTER[randomInt(0, CLASSES_COMPUTER.length)];
 
+    let resultStr: string;
     const result = getResult(playerClass, computerClass);
     if (result.tie) {
-      this.setState({ result: "It's a tie!" });
+      resultStr = "It's a tie!";
     } else {
-      const resultStr =
+      resultStr =
         result.winner.charAt(0).toUpperCase() +
         result.winner.slice(1) +
         ' ' +
         result.action +
         (result.loser && ' ' + result.loser) +
-        '.';
+        '. ';
 
       if (result.winner === playerClass) {
-        this.setState({
-          result: resultStr + 'You win!',
-        });
+        resultStr += 'You win!';
       } else {
-        this.setState({ result: resultStr + 'You lose!' });
+        resultStr += 'You lose!';
       }
     }
 
+    this.setState({
+      result: resultStr,
+      computerClass,
+    });
+
     await sleep(3000);
+    this.setState({computerClass: undefined});
     this.countdownStarted = false;
   };
 
@@ -82,25 +86,38 @@ export default class Game extends React.Component<{}, State> {
   };
 
   render() {
+    const { currentShownClass, computerClass, result } = this.state;
     return (
       <div className="Game">
         <div className="Game-player-section">
-          <div>
+          <div className="Game-webcam-section">
             <WebcamClassifier onPredict={this.handlePredict} />
-            {this.state.currentShownClass}
+            <img
+              className="Game-player-class"
+              src={IMAGES[currentShownClass]}
+              width={40}
+              height={40}
+              alt={currentShownClass}
+            />
           </div>
           <div className="Game-spacer" />
           <div
             className="Game-computer"
             style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
           >
-            <Countdown
-              startAt={3}
-              ref={c => (this.countdown = c as Countdown)}
-            />
+            <Countdown ref={c => (this.countdown = c as Countdown)} />
+            {computerClass &&
+              <img
+                src={IMAGES[computerClass]}
+                width={96}
+                height={96}
+                alt={currentShownClass}
+              />}
           </div>
         </div>
-        <div>{this.state.result} </div>
+        <div>
+          {result}{' '}
+        </div>
         <div className="Game-text-sections">
           <About />
           <Rules />
@@ -128,7 +145,7 @@ const winners = {
     paper: 'eats',
   },
   spock: {
-    scissorcs: 'smashes',
+    scissors: 'smashes',
     rock: 'vaporizes',
   },
   other: {},

@@ -19,9 +19,19 @@
   border-radius: 8px;
   display: flex;
   justify-content: center;
-  align-items: center
+  align-items: center;
 }
 
 .Game-text-sections > * {
   margin-top: 48px;
+}
+
+.Game-webcam-section {
+  position: relative;
+}
+
+.Game-player-class {
+  position: absolute;
+  bottom: 8px;
+  right: 6px;
 }

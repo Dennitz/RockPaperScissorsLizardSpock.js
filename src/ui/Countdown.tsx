@@ -1,39 +1,52 @@
 import * as React from 'react';
 import { sleep } from '../utils';
+import './styles/Countdown.css';
 
-export interface Props {
-  /** The number in seconds to count down from. */
-  startAt: number;
-}
+const COUNTDOWN_FROM = 5;
+const INTERVAL = 600; // 1 second
+
+// these words will be shown in this order, one at each step of the countdown
+const CLASSES = ['Rock', 'Paper', 'Scissors', 'Lizard', 'Spock'];
 
 export interface State {
+  countdownStarted: boolean;
   timeRemaining: number;
 }
 
-const INTERVAL = 1000; // 1 second
-
-export default class Countdown extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      timeRemaining: props.startAt,
-    };
-  }
+export default class Countdown extends React.Component<{}, State> {
+  state = {
+    countdownStarted: false,
+    timeRemaining: COUNTDOWN_FROM
+  };
 
   async start(afterCountdown: () => void) {
-    this.setState({ timeRemaining: this.props.startAt });
+    this.setState({
+      countdownStarted: true,
+      timeRemaining: COUNTDOWN_FROM + 1
+    });
     await this.countdown();
     afterCountdown();
+    this.setState({countdownStarted: false});
   }
 
   private async countdown() {
-    while (this.state.timeRemaining > 0) {
+    while (this.state.timeRemaining > 1) {
       this.setState({ timeRemaining: this.state.timeRemaining - 1 });
       await sleep(INTERVAL);
     }
   }
 
   render() {
-    return <h1>{this.state.timeRemaining}</h1>;
+    if (!this.state.countdownStarted) {
+      return null;
+    }
+    return (
+      <div className="Countdown">
+        <h1>
+          {this.state.timeRemaining}
+        </h1>
+        {CLASSES[CLASSES.length - this.state.timeRemaining]}
+      </div>
+    );
   }
 }

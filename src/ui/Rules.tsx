@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextSection from './TextSection';
 import './styles/Rules.css';
 
-const rule_parts = [
+const ruleParts = [
   'Scissors cuts Paper,',
   'Paper covers Rock,',
   'Rock crushes Lizard,',
@@ -12,7 +12,7 @@ const rule_parts = [
   'Lizard eats Paper,',
   'Paper disproves Spock,',
   'Spock vaporizes Rock,',
-  'and (as it always has) Rock crushes Scissors.',
+  'and (as it always has) Rock crushes Scissors.'
 ];
 
 export default function Rules() {
@@ -20,14 +20,21 @@ export default function Rules() {
     <TextSection heading="Rules">
       <div className="Rules-content">
         <ul className="Rules-list">
-          {rule_parts.map(rule => <li key={rule}>{rule}</li>)}
+          {ruleParts.map(rule =>
+            <li key={rule}>
+              {rule}
+            </li>
+          )}
         </ul>
+        {/* positioned behind image to make text wrap on absolute positioned
+            image whithout extending flex container vertivally */}
+        <div className="Rules-textwrap" />
         <img
           className="Rules-image"
-          src={require('./rules.png')}
+          src={require('./images/rules.png')}
           alt="rules-image"
-          width={256}
-          height={256}
+          width={240}
+          height={240}
         />
       </div>
     </TextSection>

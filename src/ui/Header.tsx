@@ -8,7 +8,7 @@ export default function Header() {
       <a href="https://github.com/Dennitz/RockPaperScissorsLizardSpock.js">
         <img
           className="Header-github"
-          src={require('./github-icon-white.svg')}
+          src={require('./images/github-icon-white.svg')}
           alt="github"
           width={28}
           height={28}

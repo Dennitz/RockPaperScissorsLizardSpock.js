@@ -3,7 +3,7 @@ import {
   Array3D,
   gpgpu_util,
   GPGPUContext,
-  NDArrayMathGPU,
+  NDArrayMathGPU
 } from '../deeplearn';
 import { SqueezeNet } from '../ai/squeezenet';
 import { IMAGE_SIZE } from '../constants';
@@ -11,9 +11,9 @@ import { sleep } from '../utils';
 import './styles/WebcamClassifier.css';
 
 export interface Props {
-  /** 
-   * Function that is called with the name of the predicted class, 
-   * everytime a prediction is made. 
+  /**
+   * Function that is called with the name of the predicted class,
+   * everytime a prediction is made.
    */
   onPredict: (predictedClass: string) => void;
 }
@@ -54,7 +54,7 @@ export default class CamInput extends React.Component<Props, {}> {
         },
         err => {
           console.log(err);
-        },
+        }
       );
     } else {
       console.log('your browser might not be supported');
@@ -72,14 +72,14 @@ export default class CamInput extends React.Component<Props, {}> {
       // );
       // console.log(topClassesToProbability);
       const predictedClass = this.squeezeNet.getTopClass(
-        inferenceResult.logits,
+        inferenceResult.logits
       );
       this.props.onPredict(predictedClass);
     });
 
     image.dispose();
 
-    await sleep(50);
+    await sleep(500);
     this.predict();
   };
 
