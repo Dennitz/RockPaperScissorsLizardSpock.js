@@ -2,10 +2,15 @@ import * as React from 'react';
 import './styles/CamInput.css';
 import { IMAGE_SIZE } from '../constants';
 
-export default class CamInput extends React.Component {
+export interface Props {
+  onReady?: (webcamElement?: HTMLVideoElement) => void;
+}
+
+export default class CamInput extends React.Component<Props, {}> {
   private webcamElement: HTMLVideoElement;
 
   componentDidMount() {
+    const { onReady = () => {} } = this.props;
     const navigatorAny = navigator as any;
     navigator.getUserMedia =
       navigator.getUserMedia ||
@@ -20,7 +25,7 @@ export default class CamInput extends React.Component {
         { video: { width: IMAGE_SIZE, height: IMAGE_SIZE } },
         stream => {
           this.webcamElement.src = window.URL.createObjectURL(stream);
-          this.webcamElement.play();
+          this.webcamElement.play().then(() => onReady(this.webcamElement));
         },
         err => {
           console.log(err);
@@ -38,6 +43,8 @@ export default class CamInput extends React.Component {
       <video
         ref={(v: HTMLVideoElement) => (this.webcamElement = v)}
         className="CamInput"
+        width={IMAGE_SIZE}
+        height={IMAGE_SIZE}
       />
     );
   }
