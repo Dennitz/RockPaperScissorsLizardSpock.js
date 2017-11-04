@@ -1,37 +1,68 @@
 .Game {
-  margin-top: 48px;
+  padding-top: 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.Game-player-section {
+.Game-participants-section {
   display: flex;
   justify-content: center;
 }
 
+.Game-participant {
+  background-color: #fafafa;
+  padding: 12px;
+  border-radius: 4px;
+}
+
 .Game-spacer {
   width: 48px;
+  height: 48px;
 }
 
 .Game-computer {
-  background-color: #80cbc4;
-  border-radius: 8px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.Game-text-sections > * {
-  margin-top: 48px;
-}
 
-.Game-webcam-section {
+.Game-webcam {
   position: relative;
 }
 
-.Game-player-class {
+.Game-webcam-class {
   position: absolute;
   bottom: 8px;
   right: 6px;
+}
+
+.Game-result {
+  height: 144px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+@media (max-width: 630px) {
+  .Game-participants-section {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .Game {
+    padding-top: 16px;
+  }
+
+  .Game-spacer {
+    height: 16px;
+    width: 16px;
+  }
+
+  .Game-result {
+    height: 48px;
+  }
 }

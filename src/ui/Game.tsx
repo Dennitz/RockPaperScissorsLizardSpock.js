@@ -1,8 +1,6 @@
 import * as React from 'react';
 import WebcamClassifier from './WebcamClassifier';
 import Countdown from './Countdown';
-import About from './About';
-import Rules from './Rules';
 import { IMAGE_SIZE, CLASSES } from '../constants';
 import { randomInt, sleep } from '../utils';
 import './styles/Game.css';
@@ -15,22 +13,20 @@ CLASSES.forEach(c => (IMAGES[c] = require('./images/' + c + '.png')));
 
 export interface State {
   result: string | undefined;
-  currentShownClass: string;
+  webcamClass: string;
   computerClass: string | undefined;
 }
 
 export default class Game extends React.Component<{}, State> {
   private countdown: Countdown;
   private countdownStarted: boolean;
-  private currentClass: string;
 
   constructor() {
     super();
     this.countdownStarted = false;
-    this.currentClass = 'other';
     this.state = {
       result: undefined,
-      currentShownClass: 'other',
+      webcamClass: 'other',
       computerClass: undefined,
     };
   }
@@ -41,12 +37,12 @@ export default class Game extends React.Component<{}, State> {
   };
 
   private evaluateGame = async () => {
-    const playerClass = this.currentClass;
+    const { webcamClass } = this.state;
     const computerClass =
       CLASSES_COMPUTER[randomInt(0, CLASSES_COMPUTER.length)];
 
     let resultStr: string;
-    const result = getResult(playerClass, computerClass);
+    const result = getResult(webcamClass, computerClass);
     if (result.tie) {
       resultStr = "It's a tie!";
     } else {
@@ -58,10 +54,10 @@ export default class Game extends React.Component<{}, State> {
         (result.loser && ' ' + result.loser) +
         '. ';
 
-      if (result.winner === playerClass) {
-        resultStr += 'You win!';
+      if (result.winner === webcamClass) {
+        resultStr += '\nYou win!';
       } else {
-        resultStr += 'You lose!';
+        resultStr += '\nYou lose!';
       }
     }
 
@@ -71,13 +67,12 @@ export default class Game extends React.Component<{}, State> {
     });
 
     await sleep(3000);
-    this.setState({computerClass: undefined});
+    this.setState({ computerClass: undefined });
     this.countdownStarted = false;
   };
 
   private handlePredict = (predictedClass: string) => {
-    this.currentClass = predictedClass;
-    this.setState({ currentShownClass: predictedClass });
+    this.setState({ webcamClass: predictedClass });
     if (!this.countdownStarted) {
       if (predictedClass === 'rock') {
         this.play();
@@ -86,23 +81,28 @@ export default class Game extends React.Component<{}, State> {
   };
 
   render() {
-    const { currentShownClass, computerClass, result } = this.state;
+    const { webcamClass, computerClass, result } = this.state;
     return (
       <div className="Game">
-        <div className="Game-player-section">
-          <div className="Game-webcam-section">
-            <WebcamClassifier onPredict={this.handlePredict} />
-            <img
-              className="Game-player-class"
-              src={IMAGES[currentShownClass]}
-              width={40}
-              height={40}
-              alt={currentShownClass}
-            />
+        <div className="Game-participants-section">
+          <div className="Game-participant">
+            <div
+              className="Game-webcam"
+              style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
+            >
+              <WebcamClassifier onPredict={this.handlePredict} />
+              <img
+                className="Game-webcam-class"
+                src={IMAGES[webcamClass]}
+                width={40}
+                height={40}
+                alt={webcamClass}
+              />
+            </div>
           </div>
           <div className="Game-spacer" />
           <div
-            className="Game-computer"
+            className="Game-computer Game-participant"
             style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
           >
             <Countdown ref={c => (this.countdown = c as Countdown)} />
@@ -111,16 +111,12 @@ export default class Game extends React.Component<{}, State> {
                 src={IMAGES[computerClass]}
                 width={96}
                 height={96}
-                alt={currentShownClass}
+                alt={webcamClass}
               />}
           </div>
         </div>
-        <div>
+        <div className="Game-result">
           {result}{' '}
-        </div>
-        <div className="Game-text-sections">
-          <About />
-          <Rules />
         </div>
       </div>
     );

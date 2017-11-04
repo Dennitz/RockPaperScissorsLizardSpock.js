@@ -18,7 +18,7 @@ const ruleParts = [
 export default function Rules() {
   return (
     <TextSection heading="Rules">
-      <div className="Rules-content">
+      <div className="Rules-container">
         <ul className="Rules-list">
           {ruleParts.map(rule =>
             <li key={rule}>

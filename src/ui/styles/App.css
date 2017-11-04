@@ -2,7 +2,18 @@
   height: 32px;
 }
 
-.App-content {
-  margin-left: 16px;
-  margin-right: 16px;
+.App-game {
+  background-color: #eeeeee;
 }
+
+.App-text-sections {
+  /* display: flex; */
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* margin-left: 32px; */
+  /* margin-right: 32px; */
+  /* margin-top: 16px; */
+  margin: 16px auto 0
+} 
+
+

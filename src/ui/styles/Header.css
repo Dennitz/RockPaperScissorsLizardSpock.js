@@ -6,12 +6,26 @@
   justify-content: space-between;
 }
 
-.Header > h1 {
+.Header-title {
   margin-left: 32px;
   color: white;
   font-size: 22px;
 }
 
+.Header-title::before {
+  content: "RockPaperScissorsLizardSpock.js";
+}
+
 .Header-github {
-  margin-right: 32px;
+  margin-right: 16px;
+}
+
+@media (max-width: 630px) {
+.Header-title {
+  margin-left: 16px;
+}
+
+.Header-title::before {
+  content: "RPSLS.js";
+}
 }

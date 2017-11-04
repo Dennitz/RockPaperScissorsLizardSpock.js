@@ -6,7 +6,7 @@
   margin: auto;
 }
 
-.Rules-content {
+.Rules-container {
   position: relative;
   display: flex;
 }
@@ -20,4 +20,21 @@
 .Rules-textwrap {
   flex-shrink: 0;
   width: 240px;
+}
+
+@media (max-width: 630px) {
+  .Rules-container {
+    flex-direction: column;
+    position: static;
+    background-color: green;
+  }
+
+  .Rules-image {
+    position: static;
+    margin: 0;
+  }
+
+  .Rules-textwrap {
+    display: none;
+  }
 }

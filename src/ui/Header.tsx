@@ -4,7 +4,7 @@ import './styles/Header.css';
 export default function Header() {
   return (
     <div className="Header">
-      <h1>RockPaperScissorsLizardSpock.js</h1>
+      <h1 className="Header-title" />
       <a href="https://github.com/Dennitz/RockPaperScissorsLizardSpock.js">
         <img
           className="Header-github"

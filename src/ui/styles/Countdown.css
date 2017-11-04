@@ -1,3 +1,31 @@
 .Countdown {
   text-align: center;
 }
+
+.Countdown-slide-enter {
+  position: relative;
+  bottom: 35px;
+}
+
+.Countdown-slide-enter.Countdown-slide-enter-active {
+  bottom: 0px;
+  transition: bottom 100ms ease-out;
+}
+
+.Countdown-fade-enter {
+  opacity: 0;
+}
+
+.Countdown-fade-enter.Countdown-fade-enter-active {
+  opacity: 1;
+  transition: opacity 40ms ease-in;
+}
+
+.Countdown-fade-exit {
+  opacity: 1;
+}
+
+.Countdown-fade-exit.Countdown-fade-exit-active {
+  opacity: 0;
+  transition: opacity 40ms ease-out;
+}

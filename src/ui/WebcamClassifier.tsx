@@ -7,7 +7,6 @@ import {
 } from '../deeplearn';
 import { SqueezeNet } from '../ai/squeezenet';
 import { sleep } from '../utils';
-import './styles/WebcamClassifier.css';
 import CamInput from './CamInput';
 
 export interface Props {
