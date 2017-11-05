@@ -24,3 +24,10 @@
   display: flex;
   flex-direction: column;
 }
+
+@media (max-width: 630px) {
+  .App-text-sections-container {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+}

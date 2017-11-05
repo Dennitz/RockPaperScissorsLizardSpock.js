@@ -27,7 +27,6 @@
   align-items: center;
 }
 
-
 .Game-webcam {
   position: relative;
 }
@@ -38,12 +37,29 @@
   right: 6px;
 }
 
-.Game-result {
+.Game-result-container {
   height: 144px;
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
+}
+
+.Game-result-enter {
+  opacity: 0;
+}
+
+.Game-result-enter.Game-result-enter-active {
+  opacity: 1;
+  transition: opacity 80ms ease-in;
+}
+
+.Game-result-exit {
+  opacity: 1;
+}
+
+.Game-result-exit.Game-result-exit-active {
+  opacity: 0;
+  transition: opacity 80ms ease-out;
 }
 
 @media (max-width: 630px) {
@@ -62,7 +78,7 @@
     width: 16px;
   }
 
-  .Game-result {
+  .Game-result-container {
     height: 48px;
   }
 }

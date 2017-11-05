@@ -50,7 +50,7 @@ export default class WebcamClassifier extends React.Component<Props, {}> {
 
     image.dispose();
 
-    await sleep(500);
+    await sleep(30);
     this.predict();
   };
 

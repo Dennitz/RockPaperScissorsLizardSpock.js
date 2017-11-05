@@ -1,6 +1,8 @@
 import * as React from 'react';
+import { CSSTransition } from 'react-transition-group';
 import WebcamClassifier from './WebcamClassifier';
 import Countdown from './Countdown';
+import Result from './Result';
 import { IMAGE_SIZE, CLASSES } from '../constants';
 import { randomInt, sleep } from '../utils';
 import './styles/Game.css';
@@ -9,12 +11,17 @@ import './styles/Game.css';
 const CLASSES_COMPUTER = CLASSES.filter(c => c !== 'other');
 // contains an icon for each class
 const IMAGES = {};
-CLASSES.forEach(c => (IMAGES[c] = require('./images/' + c + '.png')));
+CLASSES_COMPUTER.forEach(c => (IMAGES[c] = require('./images/' + c + '.png')));
+// tslint:disable-next-line
+IMAGES['other'] = require('./images/other.svg');
 
 export interface State {
-  result: string | undefined;
-  webcamClass: string;
-  computerClass: string | undefined;
+  outcome: {
+    webcamClass: string;
+    computerClass: string;
+  };
+  showOutcome: boolean;
+  currentWebcamClass: string;
 }
 
 export default class Game extends React.Component<{}, State> {
@@ -25,54 +32,42 @@ export default class Game extends React.Component<{}, State> {
     super();
     this.countdownStarted = false;
     this.state = {
-      result: undefined,
-      webcamClass: 'other',
-      computerClass: undefined,
+      outcome: {
+        webcamClass: 'other',
+        computerClass: 'other',
+      },
+      showOutcome: false,
+      currentWebcamClass: 'other',
     };
   }
 
   play = (): void => {
+    this.setState({
+      showOutcome: false,
+    });
     this.countdownStarted = true;
     this.countdown.start(this.evaluateGame);
   };
 
   private evaluateGame = async () => {
-    const { webcamClass } = this.state;
+    const { currentWebcamClass } = this.state;
     const computerClass =
       CLASSES_COMPUTER[randomInt(0, CLASSES_COMPUTER.length)];
 
-    let resultStr: string;
-    const result = getResult(webcamClass, computerClass);
-    if (result.tie) {
-      resultStr = "It's a tie!";
-    } else {
-      resultStr =
-        result.winner.charAt(0).toUpperCase() +
-        result.winner.slice(1) +
-        ' ' +
-        result.action +
-        (result.loser && ' ' + result.loser) +
-        '. ';
-
-      if (result.winner === webcamClass) {
-        resultStr += '\nYou win!';
-      } else {
-        resultStr += '\nYou lose!';
-      }
-    }
-
     this.setState({
-      result: resultStr,
-      computerClass,
+      showOutcome: true,
+      outcome: {
+        webcamClass: currentWebcamClass,
+        computerClass,
+      },
     });
 
-    await sleep(3000);
-    this.setState({ computerClass: undefined });
+    await sleep(2000);
     this.countdownStarted = false;
   };
 
   private handlePredict = (predictedClass: string) => {
-    this.setState({ webcamClass: predictedClass });
+    this.setState({ currentWebcamClass: predictedClass });
     if (!this.countdownStarted) {
       if (predictedClass === 'rock') {
         this.play();
@@ -81,7 +76,7 @@ export default class Game extends React.Component<{}, State> {
   };
 
   render() {
-    const { webcamClass, computerClass, result } = this.state;
+    const { currentWebcamClass, outcome, showOutcome } = this.state;
     return (
       <div className="Game">
         <div className="Game-participants-section">
@@ -93,10 +88,10 @@ export default class Game extends React.Component<{}, State> {
               <WebcamClassifier onPredict={this.handlePredict} />
               <img
                 className="Game-webcam-class"
-                src={IMAGES[webcamClass]}
+                src={IMAGES[currentWebcamClass]}
                 width={40}
                 height={40}
-                alt={webcamClass}
+                alt={currentWebcamClass}
               />
             </div>
           </div>
@@ -106,80 +101,32 @@ export default class Game extends React.Component<{}, State> {
             style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
           >
             <Countdown ref={c => (this.countdown = c as Countdown)} />
-            {computerClass &&
+            {showOutcome &&
               <img
-                src={IMAGES[computerClass]}
+                src={IMAGES[outcome.computerClass]}
                 width={96}
                 height={96}
-                alt={webcamClass}
+                alt={outcome.computerClass}
               />}
           </div>
         </div>
-        <div className="Game-result">
-          {result}{' '}
+        <div className="Game-result-container">
+          <CSSTransition
+            classNames="Game-result"
+            in={showOutcome}
+            timeout={80}
+            mountOnEnter
+            unmountOnExit
+          >
+            <div>
+              <Result
+                webcamClass={outcome.webcamClass}
+                computerClass={outcome.computerClass}
+              />
+            </div>
+          </CSSTransition>
         </div>
       </div>
     );
-  }
-}
-
-const winners = {
-  scissors: {
-    paper: 'cuts',
-    lizard: 'decapitates',
-  },
-  paper: {
-    rock: 'covers',
-    spock: 'disproves',
-  },
-  rock: {
-    lizard: 'crushes',
-    scissors: 'crushes',
-  },
-  lizard: {
-    spock: 'poisons',
-    paper: 'eats',
-  },
-  spock: {
-    scissors: 'smashes',
-    rock: 'vaporizes',
-  },
-  other: {},
-};
-
-type Result =
-  | {
-      tie: true;
-    }
-  | {
-      winner: string;
-      loser: string;
-      action: string;
-      tie: false;
-    };
-
-function getResult(sign1: string, sign2: string): Result {
-  if (sign1 === sign2) {
-    return { tie: true };
-  }
-  if (winners[sign1][sign2]) {
-    return {
-      winner: sign1,
-      loser: sign2,
-      action: winners[sign1][sign2] as string,
-      tie: false,
-    };
-  } else {
-    let action = winners[sign2][sign1];
-    // if one sign 'other'
-    if (action === undefined) {
-      action = 'is better than an invalid sign';
-    }
-    return {
-      winner: sign2,
-      loser: sign1,
-      action: action as string,
-      tie: false,
-    };
   }
 }
