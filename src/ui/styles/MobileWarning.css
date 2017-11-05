@@ -1,0 +1,41 @@
+.MobileWarning {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 32px;
+  padding-top: 32px;
+}
+
+.MobileWarning-text {
+  padding-top: 72px;
+  text-align: center;
+  margin-right: 16px;
+  margin-left: 16px;
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.MobileWarning-btn {
+  background-color: #26a69a;
+  height: 36px;
+  width: 64px;
+  color: white;
+  font-weight: bold;
+  font-size: 14px;
+
+  padding: 0;
+
+  border-width: 0;
+  outline: none;
+  border-radius: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .6);
+  
+  transition: background-color .3s;
+}
+
+.MobileWarning-btn:hover, .MobileWarning-btn:focus {
+  background-color: #00766c;
+}
+
