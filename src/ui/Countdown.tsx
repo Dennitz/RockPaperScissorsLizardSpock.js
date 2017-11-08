@@ -3,10 +3,12 @@ import { CSSTransition } from 'react-transition-group';
 import { sleep } from '../utils';
 import './styles/Countdown.css';
 
+/** time between steps */
+const STEP_TIMEOUT = 800;
 const COUNTDOWN_FROM = 5;
-const INTERVAL = 600;
-const FADE_DURATION = 40;
-const SLIDE_DURATION = 100;
+
+const FADE_DURATION = 110;
+const SLIDE_DURATION = 110;
 
 // these words will be shown in this order, one at each step of the countdown
 const CLASSES = ['Rock', 'Paper', 'Scissors', 'Lizard', 'Spock'];
@@ -69,13 +71,13 @@ export default class Countdown extends React.Component<{}, State> {
 
       setTimeout(
         () => this.setState({ startFade: false }),
-        INTERVAL - FADE_DURATION,
+        STEP_TIMEOUT - FADE_DURATION,
       );
       setTimeout(
         () => this.setState({ startSlide: false }),
-        INTERVAL - SLIDE_DURATION,
+        STEP_TIMEOUT - SLIDE_DURATION,
       );
-      await sleep(INTERVAL);
+      await sleep(STEP_TIMEOUT);
     }
   }
 

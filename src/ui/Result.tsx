@@ -73,7 +73,7 @@ function getOutcome(webcamClass: string, computerClass: string): Outcome {
     let loser;
     // if one sign is 'other'
     if (action === undefined) {
-      action = 'is better than';
+      action = 'beats';
       loser = '?';
     }
     return {

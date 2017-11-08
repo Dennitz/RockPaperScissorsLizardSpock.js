@@ -3,6 +3,20 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+}
+
+.Game-error-container {
+  position: absolute;
+  background-color: white;
+  width: 200px;
+  top: 0;
+  right: 0;
+}
+
+.Game-error {
+  font-size: 17px;
+  margin: 16px;
 }
 
 .Game-participants-section {
@@ -37,10 +51,10 @@
   right: 6px;
 }
 
-.Game-result-container {
-  height: 144px;
+.Game-info-container {
+  height: 70px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
 }
 
@@ -62,6 +76,40 @@
   transition: opacity 80ms ease-out;
 }
 
+.Game-hint-container {
+  display: flex;
+  align-items: center;
+  height: 70px;
+}
+
+.Game-hint {
+  font-size: 17px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.5)
+}
+
+.Game-hint-img {
+  vertical-align: middle;
+}
+
+.Game-hint-enter {
+  opacity: 0;
+}
+
+.Game-hint-enter.Game-hint-enter-active {
+  opacity: 1;
+  transition: opacity 120ms ease-in;
+}
+
+.Game-hint-exit {
+  opacity: 1;
+}
+
+.Game-hint-exit.Game-hint-exit-active {
+  opacity: 0;
+  transition: opacity 120ms ease-out;
+}
+
 @media (max-width: 630px) {
   .Game-participants-section {
     flex-direction: column;
@@ -78,7 +126,8 @@
     width: 16px;
   }
 
-  .Game-result-container {
-    height: 48px;
+  .Game-info-container {
+    height: 64px;
   }
 }
+

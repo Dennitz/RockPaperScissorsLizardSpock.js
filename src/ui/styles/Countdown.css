@@ -9,7 +9,16 @@
 
 .Countdown-slide-enter.Countdown-slide-enter-active {
   bottom: 0px;
-  transition: bottom 100ms ease-out;
+  transition: bottom 110ms ease-out;
+}
+
+.Countdown-slide-exit {
+  position: relative;
+  bottom: 0px;
+}
+
+.Countdown-slide-enter.Countdown-slide-enter-active {
+  bottom: 0px;
 }
 
 .Countdown-fade-enter {
@@ -18,7 +27,7 @@
 
 .Countdown-fade-enter.Countdown-fade-enter-active {
   opacity: 1;
-  transition: opacity 40ms ease-in;
+  transition: opacity 110ms ease-in;
 }
 
 .Countdown-fade-exit {
@@ -27,5 +36,5 @@
 
 .Countdown-fade-exit.Countdown-fade-exit-active {
   opacity: 0;
-  transition: opacity 40ms ease-out;
+  transition: opacity 110ms ease-out;
 }

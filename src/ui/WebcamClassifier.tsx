@@ -15,6 +15,23 @@ export interface Props {
    * everytime a prediction is made.
    */
   onPredict: (predictedClass: string) => void;
+  /**
+   * Called once after all variables were loaded and the WebcamClassifier
+   * starts predicting.
+   */
+  onReady?: () => void;
+  /**
+   * Called if no camera is detected.
+   */
+  onNoCamera?: () => void;
+  /**
+   * Called if premissions for camera usage where received.
+   */
+  onPermissionReceived?: () => void;
+  /**
+   * Called if premissions for camera usage where denied.
+   */
+  onPermissionDenied?: () => void;
 }
 
 export default class WebcamClassifier extends React.Component<Props, {}> {
@@ -33,8 +50,14 @@ export default class WebcamClassifier extends React.Component<Props, {}> {
   }
 
   private handleWebcamReady = (webcamElement: HTMLVideoElement) => {
+    const { onReady } = this.props;
     this.webcamElement = webcamElement;
-    this.squeezeNet.loadVariables().then(this.predict);
+    this.squeezeNet.loadVariables().then(() => {
+      this.predict();
+      if (onReady) {
+        onReady();
+      }
+    });
   };
 
   private predict = async () => {
@@ -55,6 +78,20 @@ export default class WebcamClassifier extends React.Component<Props, {}> {
   };
 
   render() {
-    return <CamInput onReady={this.handleWebcamReady} />;
+    const noop = () => {};
+    const {
+      onNoCamera = noop,
+      onPermissionReceived = noop,
+      onPermissionDenied = noop,
+    } = this.props;
+
+    return (
+      <CamInput
+        onReady={this.handleWebcamReady}
+        onNoCamera={onNoCamera}
+        onPermissionDenied={onPermissionDenied}
+        onPermissionReceived={onPermissionReceived}
+      />
+    );
   }
 }

@@ -25,22 +25,22 @@ yarn train
 ```
 This allows you to take images for training and save them in a folder per category.  
 
-If you do this multiple times (with page reloads) there will be conflicting names. To solve this use `merge-dirs.py`.  
+If you do this multiple times (with page reloads) there will be conflicting names. To solve this use `model-training/merge-dirs.py`.  
 
 E.g. if you have the folders `train1` and `train2` each containing a folder per category, you can do: 
 ```
 python merge-dirs.py train2 train1
 ``` 
-This will move all files from `train2` to `train1` and resolve conflicting names.
+This will move all files from `train2` to `train1` and resolve naming conflicts.
 
 After this you can delete `train2` (which should be empty):
 ```
 rm -rf train2
 ```
 
-### Training the model
+### Train the model
 
-The jupyter notebook `rock-paper-scissors-lizard-spock.ipynb` walks you through the process of training the neural net using keras and saving the model so that it can be used with deeplearn.js. 
+The jupyter notebook `model-training/rock-paper-scissors-lizard-spock.ipynb` walks you through the process of training the neural net using keras. It also shows how to save the model for use with deeplearn.js. 
 
 The resulting weights can be downloaded [here](https://github.com/Dennitz/usercontent/files/1444460/keras-weights.hdf5.zip).
 
