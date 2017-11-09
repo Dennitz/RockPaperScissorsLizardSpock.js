@@ -90,7 +90,7 @@ export default class Game extends React.Component<{}, State> {
       if (!this.countdownStarted) {
         this.setState({ showHint: true });
       }
-    }, 6000);
+    }, 4000);
   };
 
   private handlePredict = (predictedClass: string) => {

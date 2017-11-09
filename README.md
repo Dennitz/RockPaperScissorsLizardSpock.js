@@ -33,7 +33,7 @@ python merge-dirs.py train2 train1
 ``` 
 This will move all files from `train2` to `train1` and resolve naming conflicts.
 
-After this you can delete `train2` (which should be empty):
+After this you can delete `train2` (which by now should not contain any files):
 ```
 rm -rf train2
 ```
@@ -42,7 +42,7 @@ rm -rf train2
 
 The jupyter notebook `model-training/rock-paper-scissors-lizard-spock.ipynb` walks you through the process of training the neural net using keras. It also shows how to save the model for use with deeplearn.js. 
 
-The resulting weights can be downloaded [here](https://github.com/Dennitz/usercontent/files/1444460/keras-weights.hdf5.zip).
+The resulting weights can be downloaded [here](https://github.com/Dennitz/usercontent/files/1457961/keras-weights.hdf5.zip).
 
 To run the notebook you need:
 - Python 3
