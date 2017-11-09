@@ -159,8 +159,8 @@ export default class Game extends React.Component<{}, State> {
               <img
                 className="Game-webcam-class"
                 src={IMAGES[currentWebcamClass]}
-                width={40}
-                height={40}
+                width={44}
+                height={44}
                 alt={currentWebcamClass}
               />
             </div>
