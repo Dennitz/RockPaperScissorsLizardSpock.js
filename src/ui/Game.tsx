@@ -121,102 +121,130 @@ export default class Game extends React.Component<{}, State> {
     this.setState({ noCameraDetected: true });
   };
 
-  render() {
-    const {
-      currentWebcamClass,
-      downloadingModel,
-      noCameraDetected,
-      outcome,
-      showHint,
-      showOutcome,
-      webcamPermissionDenied,
-    } = this.state;
+  private renderError = () => {
+    const { noCameraDetected, webcamPermissionDenied } = this.state;
     const error = Boolean(webcamPermissionDenied || noCameraDetected);
 
+    if (!error) {
+      return null;
+    }
+    return (
+      <div className="Game-error-container">
+        <div className="Game-error">
+          {webcamPermissionDenied &&
+            'You need to enable webcam access and reload the page.'}
+          {noCameraDetected && 'You need a webcam for this demo to work.'}
+        </div>
+      </div>
+    );
+  };
+
+  private renderParticipantWebcam = () => {
+    const { currentWebcamClass } = this.state;
+    return (
+      <div className="Game-participant">
+        <div
+          className="Game-webcam"
+          style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
+        >
+          <WebcamClassifier
+            onPredict={this.handlePredict}
+            onReady={this.handleClassiferReady}
+            onPermissionReceived={this.handleWebcamPermissionReceived}
+            onPermissionDenied={this.handleWebcamPermissionDenied}
+            onNoCamera={this.handleNoCameraDetected}
+          />
+          <img
+            className="Game-webcam-class"
+            src={IMAGES[currentWebcamClass]}
+            width={44}
+            height={44}
+            alt={currentWebcamClass}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  private renderParticipantComputer = () => {
+    const { outcome, showOutcome } = this.state;
+    return (
+      <div
+        className="Game-computer Game-participant"
+        style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
+      >
+        <Countdown ref={c => (this.countdown = c as Countdown)} />
+        {showOutcome &&
+          <img
+            src={IMAGES[outcome.computerClass]}
+            width={96}
+            height={96}
+            alt={outcome.computerClass}
+          />}
+      </div>
+    );
+  };
+
+  private renderInfo = () => {
+    const { downloadingModel, outcome, showOutcome } = this.state;
+    return (
+      <div className="Game-info-container">
+        {downloadingModel && <Spinner>Loading model</Spinner>}
+        <CSSTransition
+          classNames="Game-result"
+          in={showOutcome}
+          timeout={80}
+          mountOnEnter
+          unmountOnExit
+        >
+          <div>
+            <Result
+              webcamClass={outcome.webcamClass}
+              computerClass={outcome.computerClass}
+            />
+          </div>
+        </CSSTransition>
+      </div>
+    );
+  };
+
+  private renderStartGameHint = () => {
+    const { showHint } = this.state;
+    return (
+      <div className="Game-hint-container">
+        <CSSTransition
+          classNames="Game-hint"
+          in={showHint}
+          timeout={120}
+          unmountOnExit
+        >
+          <div className="Game-hint">
+            Show{' '}
+            <img
+              className="Game-hint-img"
+              src={IMAGES.rock}
+              alt="rock"
+              width={32}
+              height={32}
+            />{' '}
+            to start the game.
+          </div>
+        </CSSTransition>
+      </div>
+    );
+  };
+
+  render() {
     return (
       <div className="Game">
-        {error &&
-          <div className="Game-error-container">
-            <div className="Game-error">
-              {webcamPermissionDenied &&
-                'You need to enable webcam access and reload the page.'}
-              {noCameraDetected && 'You need a webcam for this demo to work.'}
-            </div>
-          </div>}
+        {this.renderError()}
         <div className="Game-participants-section">
-          <div className="Game-participant">
-            <div
-              className="Game-webcam"
-              style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
-            >
-              <WebcamClassifier
-                onPredict={this.handlePredict}
-                onReady={this.handleClassiferReady}
-                onPermissionReceived={this.handleWebcamPermissionReceived}
-                onPermissionDenied={this.handleWebcamPermissionDenied}
-                onNoCamera={this.handleNoCameraDetected}
-              />
-              <img
-                className="Game-webcam-class"
-                src={IMAGES[currentWebcamClass]}
-                width={44}
-                height={44}
-                alt={currentWebcamClass}
-              />
-            </div>
-          </div>
+          {this.renderParticipantWebcam()}
           <div className="Game-spacer" />
-          <div
-            className="Game-computer Game-participant"
-            style={{ height: IMAGE_SIZE, width: IMAGE_SIZE }}
-          >
-            <Countdown ref={c => (this.countdown = c as Countdown)} />
-            {showOutcome &&
-              <img
-                src={IMAGES[outcome.computerClass]}
-                width={96}
-                height={96}
-                alt={outcome.computerClass}
-              />}
-          </div>
+          {this.renderParticipantComputer()}
         </div>
-        <div className="Game-info-container">
-          {downloadingModel && <Spinner>Loading model</Spinner>}
-          <CSSTransition
-            classNames="Game-result"
-            in={showOutcome}
-            timeout={80}
-            mountOnEnter
-            unmountOnExit
-          >
-            <div>
-              <Result
-                webcamClass={outcome.webcamClass}
-                computerClass={outcome.computerClass}
-              />
-            </div>
-          </CSSTransition>
-        </div>
-        <div className="Game-hint-container">
-          <CSSTransition
-            classNames="Game-hint"
-            in={showHint}
-            timeout={120}
-            unmountOnExit
-          >
-            <div className="Game-hint">
-              Show{' '}
-              <img
-                className="Game-hint-img"
-                src={IMAGES.rock}
-                alt="rock"
-                width={32}
-                height={32}
-              />{' '}
-              to start the game.
-            </div>
-          </CSSTransition>
-        </div>
+        {this.renderInfo()}
+        {this.renderStartGameHint()}
       </div>
     );
   }
