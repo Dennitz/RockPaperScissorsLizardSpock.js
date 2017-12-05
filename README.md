@@ -6,6 +6,8 @@ By using a convolutional neural network, this demo can regonize which move is pl
 
 [Demo](https://rpslsjs.herokuapp.com/)
 
+![](https://user-images.githubusercontent.com/18401729/33631424-d520abfe-da0a-11e7-91bd-505158dedfc1.gif)
+
 ## What's used?
 - [deeplearn.js](https://github.com/PAIR-code/deeplearnjs) to run a neural net in a browser.
 - [TypeScript](https://github.com/Microsoft/TypeScript) with [React](https://github.com/facebook/react) for the UI.
